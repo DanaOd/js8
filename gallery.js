@@ -61,7 +61,7 @@ const createGalleryMarkDown = (image) => {
   return `<li class="gallery__item">
   <a
     class="gallery__link"
-    href="#"
+    href="${original}"
   >
     <img
       class="gallery__image"
@@ -75,6 +75,7 @@ const createGalleryMarkDown = (image) => {
     .join("")
 }
 
+
 const galleryMarkDown = createGalleryMarkDown(images);
 // console.log(galleryMarkDown);
 
@@ -84,13 +85,19 @@ targetDivEl.insertAdjacentHTML("beforeend", galleryMarkDown);
 targetDivEl.addEventListener("click", onImgClick);
 
 function onImgClick(event) {
+
+  //воспользоваться preventDefault чтобы a не открывалось cамо
+
+  event.preventDefault()
   if (event.target.nodeName!=="IMG") {
     return;
   }
   console.log("клик по картинке");
 
-  // 3. Открытие модального окна по клику на элементе галереи.
+  // 3. Открытие модального окна по клику на элементе галереи. is-open
 
-  document.body.classList.add("lightbox.is-open");
+  document.body.classList.add("lightbox");
+  //document.body.classList.add("is-open"); //а можно 2 за раз добавить?? каким синтаксисом? НЕ РАБОТАЕТ
+  console.log(document.body.classList);
 }
  
