@@ -2,7 +2,8 @@
 
 console.log("Task 1");
 
-import {} from './gallery-items'
+import images from './gallery-items.js'
+// console.log(images);
 
 // task description. 
 // Создай галерею с возможностью клика по ее элементам и просмотра полноразмерного изображения в модальном окне.
@@ -10,12 +11,12 @@ import {} from './gallery-items'
 
 // Разбей задание на несколько подзадач:
 
-// Создание и рендер разметки по массиву данных и предоставленному шаблону.
-// Реализация делегирования на галерее ul.js-gallery и получение url большого изображения.
-// Открытие модального окна по клику на элементе галереи.
-// Подмена значения атрибута src элемента img.lightbox__image.
-// Закрытие модального окна по клику на кнопку button[data-action="close-lightbox"].
-// Очистка значения атрибута src элемента img.lightbox__image.Это необходимо для того, чтобы при следующем открытии
+// 1. Создание и рендер разметки по массиву данных и предоставленному шаблону.
+// 2. Реализация делегирования на галерее ul.js-gallery и получение url большого изображения.
+// 3. Открытие модального окна по клику на элементе галереи.
+// 4. Подмена значения атрибута src элемента img.lightbox__image.
+// 5. Закрытие модального окна по клику на кнопку button[data-action="close-lightbox"].
+// 6. Очистка значения атрибута src элемента img.lightbox__image.Это необходимо для того, чтобы при следующем открытии
 // модального окна, пока грузится изображение, мы не видели предыдущее.
 
 // Стартовые файлы
@@ -48,3 +49,48 @@ import {} from './gallery-items'
   </a>
 </li> */}
 
+
+
+// 1. Создание и рендер разметки по массиву данных и предоставленному шаблону.
+
+const targetDivEl = document.querySelector(".js-gallery");
+// console.log(targetDivEl);
+
+const createGalleryMarkDown = (image) => {
+  return images.map(({preview, original, description}) => {
+  return `<li class="gallery__item">
+  <a
+    class="gallery__link"
+    href="#"
+  >
+    <img
+      class="gallery__image"
+      src="${preview}"
+      data-source="${preview}"
+      alt="${description}"
+    />
+  </a>
+</li>`
+})
+    .join("")
+}
+
+const galleryMarkDown = createGalleryMarkDown(images);
+// console.log(galleryMarkDown);
+
+targetDivEl.insertAdjacentHTML("beforeend", galleryMarkDown);
+
+//2. Реализация делегирования на галерее ul.js-gallery и получение url большого изображения.
+targetDivEl.addEventListener("click", onImgClick);
+
+function onImgClick(event) {
+  if (event.target.nodeName!=="IMG") {
+    return;
+  }
+  console.log("клик по картинке");
+
+  // 3. Открытие модального окна по клику на элементе галереи.
+
+  document.body.classList.add("lightbox.is-open");
+}
+ 
