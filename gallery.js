@@ -54,7 +54,6 @@ import images from './gallery-items.js'
 // 1. Создание и рендер разметки по массиву данных и предоставленному шаблону.
 
 const targetDivEl = document.querySelector(".js-gallery");
-// console.log(targetDivEl);
 
 const createGalleryMarkDown = (image) => {
   return images.map(({preview, original, description}) => {
@@ -66,7 +65,7 @@ const createGalleryMarkDown = (image) => {
     <img
       class="gallery__image"
       src="${preview}"
-      data-source="${preview}"
+      data-source="${original}"
       alt="${description}"
     />
   </a>
@@ -75,29 +74,72 @@ const createGalleryMarkDown = (image) => {
     .join("")
 }
 
-
 const galleryMarkDown = createGalleryMarkDown(images);
-// console.log(galleryMarkDown);
-
 targetDivEl.insertAdjacentHTML("beforeend", galleryMarkDown);
 
 //2. Реализация делегирования на галерее ul.js-gallery и получение url большого изображения.
+
+const lightboxEl = document.querySelector(".js-lightbox");
+const lightboxImgEl = document.querySelector(".lightbox__image");
+const lightboxOverlayEl = document.querySelector(".lightbox__overlay");
+const closeBtnEl = document.querySelector('[data-action="close-lightbox"]');
+
+
 targetDivEl.addEventListener("click", onImgClick);
 
+
+ //воспользоваться preventDefault чтобы a не открывалось cамо
+
+  // 3. Открытие модального окна по клику на элементе галереи. is-open
+  // find js-lightbox
+  // add class is-open
+  // update source of image in lightbox
+
 function onImgClick(event) {
-
-  //воспользоваться preventDefault чтобы a не открывалось cамо
-
-  event.preventDefault()
+  event.preventDefault();
   if (event.target.nodeName!=="IMG") {
     return;
   }
   console.log("клик по картинке");
+  lightboxEl.classList.add("is-open");
+  lightboxImgEl.src = event.target.dataset.source;
+  //4. Подмена значения атрибута src элемента img.lightbox__image.
 
-  // 3. Открытие модального окна по клику на элементе галереи. is-open
-
-  document.body.classList.add("lightbox");
-  //document.body.classList.add("is-open"); //а можно 2 за раз добавить?? каким синтаксисом? НЕ РАБОТАЕТ
-  console.log(document.body.classList);
 }
+
+  // 5. Закрытие модального окна по клику на кнопку button[data-action="close-lightbox"].
+
  
+closeBtnEl.addEventListener("click", closeModal);
+
+function  closeModal(event) {
+  lightboxEl.classList.remove("is-open");
+  // 6. Очистка значения атрибута src элемента img.lightbox__image.Это необходимо для того, чтобы
+  // при следующем открытии модального окна, пока грузится изображение, мы не видели предыдущее.
+  lightboxImgEl.src = "";
+}
+
+// 7. Закрытие модального окна по клику на div.lightbox__overlay
+
+lightboxOverlayEl.addEventListener("click", onBackdropClick);
+
+function onBackdropClick(event) {
+  if (event.currentTarget === event.target) {
+    console.log("клик по бекдропу");
+    closeModal();
+  }
+}
+
+// 7. Закрытие модального окна по нажатию клавиши ESC
+
+lightboxOverlayEl.addEventListener("click", onBackdropClick);
+
+window.addEventListener('keydown', onEscBtnClick);
+
+function onEscBtnClick(event) {
+  console.log("key:", event.key);
+  if (event.key === "Escape") {
+    console.log("нажат ESC");
+    closeModal();
+  }
+}
