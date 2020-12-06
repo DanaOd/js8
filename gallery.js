@@ -130,7 +130,7 @@ function onBackdropClick(event) {
   }
 }
 
-// 7. Закрытие модального окна по нажатию клавиши ESC
+// 8. Закрытие модального окна по нажатию клавиши ESC
 
 lightboxOverlayEl.addEventListener("click", onBackdropClick);
 
@@ -143,3 +143,5 @@ function onEscBtnClick(event) {
     closeModal();
   }
 }
+
+// 9. Пролистывание изображений галереи в открытом модальном окне клавишами "влево" и "вправо".
